@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Magang – ICHIBOT</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #145efc;
+    --blue-light: #3d7afd;
+    --blue-dark: #0d47c8;
+    --bg: #FFFFFF;
+    --bg2: #F4F7FF;
+    --card: #FFFFFF;
+    --border: rgba(20,94,252,0.12);
+    --text: #1a2340;
+    --muted: #6175A0;
+    --white: #FFFFFF;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 64px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 12px rgba(20,94,252,0.07);
+  }
+
+  .logo {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800; font-size: 1.35rem;
+    color: var(--text); text-decoration: none;
+    letter-spacing: -0.03em;
+  }
+  .logo span { color: var(--blue); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted);
+    font-size: 0.9rem; font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--blue); }
+
+  .nav-cta {
+    background: var(--blue); color: var(--white) !important;
+    padding: .45rem 1.1rem; border-radius: 6px;
+    font-weight: 600 !important;
+    transition: background .2s !important;
+  }
+  .nav-cta:hover { background: var(--blue-dark) !important; color: var(--white) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 88vh;
+    display: flex; align-items: center;
+    padding: 6rem 5% 4rem;
+    background: radial-gradient(ellipse 70% 60% at 65% 40%, rgba(20,94,252,.09) 0%, transparent 65%),
+                linear-gradient(160deg, #f0f5ff 0%, #ffffff 60%);
+    position: relative; overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .hero-inner { max-width: 620px; position: relative; z-index: 1; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .45rem;
+    background: rgba(20,94,252,.1); border: 1px solid rgba(20,94,252,.25);
+    color: var(--blue); font-size: .8rem; font-weight: 600;
+    padding: .35rem .85rem; border-radius: 50px; margin-bottom: 1.5rem;
+    letter-spacing: .04em; text-transform: uppercase;
+  }
+  .hero-badge::before { content: '●'; font-size: .55rem; animation: blink 1.6s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .hero h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 800; line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+    color: var(--text);
+  }
+  .hero h1 em { color: var(--blue); font-style: normal; }
+
+  .hero p {
+    font-size: 1.05rem; color: var(--muted);
+    max-width: 520px; margin-bottom: 2rem;
+    font-weight: 400;
+  }
+
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--blue); color: var(--white);
+    padding: .85rem 2rem; border-radius: 8px;
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: .95rem;
+    text-decoration: none; display: inline-flex; align-items: center; gap: .5rem;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 20px rgba(20,94,252,.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(20,94,252,.4); }
+
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border); padding: .85rem 1.8rem;
+    border-radius: 8px; font-weight: 500; font-size: .95rem;
+    text-decoration: none; display: inline-flex; align-items: center; gap: .5rem;
+    transition: border-color .2s, color .2s;
+  }
+  .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3rem;
+    padding-top: 2rem; border-top: 1px solid var(--border);
+  }
+  .stat-item { }
+  .stat-num {
+    font-family: 'Sora', sans-serif; font-size: 1.8rem;
+    font-weight: 800; color: var(--text);
+  }
+  .stat-num span { color: var(--blue); }
+  .stat-label { font-size: .8rem; color: var(--muted); margin-top: .1rem; }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 5rem 5%; }
+  .section-label {
+    font-size: .78rem; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--blue); margin-bottom: .75rem;
+  }
+  .section-title {
+    font-family: 'Sora', sans-serif; font-weight: 800;
+    font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--text);
+    letter-spacing: -0.02em; margin-bottom: .75rem;
+  }
+  .section-sub { color: var(--muted); max-width: 540px; font-size: .95rem; }
+
+  /* ── ABOUT ── */
+  .about { background: var(--bg2); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: center; margin-top: 3rem;
+  }
+  .about-text p { color: var(--muted); margin-bottom: 1rem; font-size: .95rem; }
+  .about-features { display: flex; flex-direction: column; gap: 1rem; }
+
+  .feature-row {
+    display: flex; align-items: flex-start; gap: 1rem;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.1rem 1.3rem;
+    transition: border-color .2s, box-shadow .2s;
+    box-shadow: 0 2px 8px rgba(20,94,252,.05);
+  }
+  .feature-row:hover { border-color: rgba(20,94,252,.3); box-shadow: 0 4px 16px rgba(20,94,252,.1); }
+
+  .feature-icon {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: rgba(20,94,252,.1); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .feature-row h4 { font-family: 'Sora', sans-serif; font-size: .95rem; font-weight: 700; color: var(--text); margin-bottom: .2rem; }
+  .feature-row p { font-size: .85rem; color: var(--muted); margin: 0; }
+
+  /* ── PROGRAM ── */
+  .program-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem; margin-top: 3rem;
+  }
+
+  .program-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.75rem;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+    position: relative; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(20,94,252,.05);
+  }
+  .program-card::before {
+    content: attr(data-num);
+    position: absolute; right: 1.25rem; top: 1rem;
+    font-family: 'Sora', sans-serif; font-size: 3.5rem;
+    font-weight: 800; color: rgba(20,94,252,.06);
+    line-height: 1;
+  }
+  .program-card:hover { transform: translateY(-4px); border-color: rgba(20,94,252,.25); box-shadow: 0 12px 32px rgba(20,94,252,.12); }
+
+  .card-icon { font-size: 1.6rem; margin-bottom: 1rem; }
+  .program-card h3 {
+    font-family: 'Sora', sans-serif; font-weight: 700;
+    font-size: 1rem; color: var(--text); margin-bottom: .5rem;
+  }
+  .program-card p { font-size: .875rem; color: var(--muted); }
+
+  .card-tag {
+    display: inline-block; margin-top: .75rem;
+    background: rgba(20,94,252,.08); color: var(--blue);
+    font-size: .75rem; font-weight: 600; padding: .25rem .7rem;
+    border-radius: 4px; letter-spacing: .03em;
+  }
+
+  /* ── REQUIREMENTS ── */
+  .requirements { background: var(--bg2); }
+  .req-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; margin-top: 3rem;
+  }
+
+  .req-list { list-style: none; display: flex; flex-direction: column; gap: .85rem; }
+  .req-list li {
+    display: flex; align-items: flex-start; gap: .75rem;
+    font-size: .93rem; color: var(--muted);
+  }
+  .req-list li::before {
+    content: '✓'; color: var(--blue); font-weight: 700;
+    flex-shrink: 0; margin-top: .05rem;
+  }
+
+  .info-box {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.75rem; height: fit-content;
+    box-shadow: 0 2px 10px rgba(20,94,252,.06);
+  }
+  .info-box h4 {
+    font-family: 'Sora', sans-serif; font-weight: 700;
+    color: var(--text); margin-bottom: 1rem; font-size: 1rem;
+  }
+  .info-row {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: .7rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: .88rem;
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .label { color: var(--muted); }
+  .info-row .value { color: var(--text); font-weight: 600; }
+  .info-row .value.orange { color: var(--blue); }
+
+  /* ── TIMELINE ── */
+  .timeline { margin-top: 3rem; position: relative; }
+  .timeline::before {
+    content: ''; position: absolute;
+    left: 18px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-item {
+    display: flex; gap: 1.5rem; margin-bottom: 2rem;
+    position: relative;
+  }
+  .tl-dot {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--white); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: .8rem;
+    color: var(--blue); flex-shrink: 0; z-index: 1;
+  }
+  .tl-dot.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
+  .tl-content h4 {
+    font-family: 'Sora', sans-serif; font-weight: 700;
+    color: var(--text); font-size: .95rem; margin-bottom: .2rem;
+  }
+  .tl-content p { font-size: .85rem; color: var(--muted); }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(20,94,252,.07) 0%, transparent 60%);
+    border-top: 1px solid var(--border);
+  }
+  .cta-section .section-title { margin: 0 auto .75rem; }
+  .cta-section .section-sub { margin: 0 auto 2rem; }
+  .cta-contact {
+    display: flex; justify-content: center; gap: 2rem;
+    flex-wrap: wrap; margin-top: 2.5rem; padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .contact-item {
+    display: flex; align-items: center; gap: .6rem;
+    font-size: .9rem; color: var(--muted); text-decoration: none;
+    transition: color .2s;
+  }
+  .contact-item:hover { color: var(--blue); }
+  .contact-item .ci { font-size: 1.1rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 5%; background: var(--bg2);
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.1rem;
+    color: var(--text); text-decoration: none;
+  }
+  .footer-logo span { color: var(--blue); }
+  footer p { font-size: .8rem; color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .about-grid, .req-grid { grid-template-columns: 1fr; }
+    .program-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp .7s ease forwards;
+  }
+  @keyframes fadeUp { to { opacity: 1; transform: none; } }
+  .delay-1 { animation-delay: .1s; }
+  .delay-2 { animation-delay: .2s; }
+  .delay-3 { animation-delay: .35s; }
+  .delay-4 { animation-delay: .5s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">ICHI<span>BOT</span></a>
+  <ul class="nav-links">
+    <li><a href="#tentang">Tentang</a></li>
+    <li><a href="#program">Program</a></li>
+    <li><a href="#syarat">Persyaratan</a></li>
+    <li><a href="#alur">Alur Pendaftaran</a></li>
+    <li><a href="#daftar" class="nav-cta">Daftar Sekarang</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge fade-up">Pendaftaran Magang Dibuka</div>
+    <h1 class="fade-up delay-1">Magang di <em>ICHIBOT</em><br>Dunia Elektronik Nyata</h1>
+    <p class="fade-up delay-2">Dapatkan pengalaman langsung di industri elektronik, IoT, dan robotika bersama tim Ichibot. Belajar, berkontribusi, dan berkembang bersama kami.</p>
+    <div class="hero-btns fade-up delay-3">
+      <a href="#program" class="btn-outline">Lihat Program</a>
+    </div>
+    <div class="hero-stats fade-up delay-4">
+      <div class="stat-item">
+        <div class="stat-num">3<span>–</span>6</div>
+        <div class="stat-label">Bulan Program</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num"><span>+</span>50</div>
+        <div class="stat-label">Alumni Magang</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num"><span>100</span>%</div>
+        <div class="stat-label">Proyek Nyata</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TENTANG -->
+<section class="about" id="tentang">
+  <div class="section-label">Tentang Program</div>
+  <h2 class="section-title">Kenapa Magang di Ichibot?</h2>
+  <p class="section-sub">Program magang kami dirancang untuk memberikan pengalaman kerja yang nyata — bukan sekadar mengamati. Kamu akan langsung terlibat dalam operasional toko, pengelolaan produk, hingga proyek teknis AI, Elektronika, serta IoT.</p>
+    </div>
+    <div class="about-features">
+      <div class="feature-row">
+        <div class="feature-icon">🛠️</div>
+        <div>
+          <h4>Proyek Nyata</h4>
+          <p>Langsung terlibat dalam proyek toko, konten, dan teknis yang berdampak.</p>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">📋</div>
+        <div>
+          <h4>Sertifikat Resmi</h4>
+          <p>Dapatkan sertifikat magang resmi yang diakui untuk keperluan akademik.</p>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feature-icon">🤝</div>
+        <div>
+          <h4>Mentoring Langsung</h4>
+          <p>Dibimbing langsung oleh tim berpengalaman di bidang elektronik dan bisnis.</p>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM -->
+<section id="program">
+  <div class="section-label">Bidang Program</div>
+  <h2 class="section-title">Pilihan Divisi Magang</h2>
+  <p class="section-sub">Pilih bidang yang sesuai dengan minat dan latar belakang studimu.</p>
+
+  <div class="program-grid">
+    <div class="program-card" data-num="01">
+      <div class="card-icon">🌐</div>
+      <h3>AI & IoT Engineer</h3>
+      <p>Untuk mahasiswa/i Jurusan Teknik Elektro, Teknik Mekatronika, Teknologi Informasi, Instrumentasi, dll. Deksiprsi Posisi: Terlibat dalam pengembangan proyek AI & IoT, Robotik, serta perancangan sistem serta integrasi </p>
+    </div>
+    <div class="program-card" data-num="02">
+      <div class="card-icon">⚙️</div>
+      <h3>Teknisi Elektrikal & Mekanikal</h3>
+      <p>Untuk Siswa/i SMK Jurusan Teknik Elektro, Teknik Otomasi Instrumentasi, Teknik Mekatronika, Teknik Audio Video, dll. Deskripsi Posisi: Bertanggung jawab dalam perakitan, instalasi, pengujian, dan perawatan sistem elektrikal dan mekanikal pada produk atau proyek  AI, IoT, dan Robotika.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SYARAT -->
+<section class="requirements" id="syarat">
+  <div class="section-label">Persyaratan</div>
+  <h2 class="section-title">Siapa yang Bisa Mendaftar?</h2>
+
+  <div class="req-grid">
+    <div>
+      <ul class="req-list">
+        <li>Mahasiswa aktif D3/D4/S1 atau Siswa/i Sekolah Menengah Kejuruan</li>
+        <li>Memiliki surat pengantar program Internship/Magang/PKL</li>
+        <li>Tertarik dengan dunia elektronik, teknologi, atau bisnis digital</li>
+        <li>Komunikatif, proaktif, dan dapat bekerja dalam tim</li>
+        <li>Bersedia mengikuti program minimal 3 bulan penuh</li>
+        <li>Membawa laptop pribadi (untuk divisi IT, Desain, Marketing)</li>
+      </ul>
+    </div>
+    <div>
+      <div class="info-box">
+        <h4>📋 Detail Program</h4>
+        <div class="info-row">
+          <span class="label">Durasi</span>
+          <span class="value">1 – 6 Bulan</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Jam Kerja</span>
+          <span class="value">Senin – Jumat, 08.30–16.30</span>
+        </div>
+         <div class="info-row">
+          <span class="label">Jam Kerja</span>
+          <span class="value">Sabtu, 09.00–15.00</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Tipe</span>
+          <span class="value">On-site (Offline)</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Lokasi</span>
+          <span class="value">Yogyakarta</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Sertifikat</span>
+          <span class="value orange">✓ Tersedia</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Uang Saku</span>
+          <span class="value">Kondisional</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Kuota</span>
+          <span class="value orange">Terbatas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALUR -->
+<section id="alur">
+  <div class="section-label">Alur Pendaftaran</div>
+  <h2 class="section-title">Cara Mendaftar</h2>
+  <p class="section-sub">Proses pendaftaran sederhana dan cepat. Ikuti langkah berikut untuk bergabung.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot active">1</div>
+      <div class="tl-content">
+        <h4>Isi Formulir Pendaftaran</h4>
+        <p>Lengkapi data diri, pilih divisi, dan unggah CV serta surat pengantar dari kampus.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">2</div>
+      <div class="tl-content">
+        <h4>Seleksi Berkas</h4>
+        <p>Tim Ichibot akan meninjau berkas pendaftaranmu dalam 3–5 hari kerja.</p>
+      </div>
+    </div>
+        <div class="tl-item">
+      <div class="tl-dot">3</div>
+      <div class="tl-content">
+        <h4>Tes Materi & Praktik</h4>
+        <p>Calon peserta Internship melakukan Tes Materi & Praktik</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">4</div>
+      <div class="tl-content">
+        <h4>Wawancara (jika lolos)</h4>
+        <p>Peserta yang lolos seleksi berkas dan tes materi & praktik akan dihubungi untuk wawancara singkat secara online atau langsung.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">5</div>
+      <div class="tl-content">
+        <h4>Konfirmasi & Onboarding</h4>
+        <p>Setelah diterima, kamu akan mendapat informasi lengkap mengenai hari pertama dan persiapan yang diperlukan.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">6</div>
+      <div class="tl-content">
+        <h4>Mulai Magang! 🎉</h4>
+        <p>Selamat datang di tim Ichibot. Perjalananmu dimulai hari ini.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KAPASITAS -->
+<section id="kapasitas" style="background:var(--bg2);">
+  <div class="section-label">Ketersediaan Tempat</div>
+  <h2 class="section-title">Daya Tampung Peserta PKL & Internship</h2>
+  <p class="section-sub">Data kapasitas dan peserta yang sedang berlangsung. Klik angka <strong>Berlangsung</strong> untuk mengubah nilainya.</p>
+
+  <div class="kap-wrapper">
+
+    <!-- TABEL 2026 -->
+    <div class="kap-table-block">
+      <div class="kap-table-title">Periode 2026</div>
+      <div class="kap-scroll">
+        <table class="kap-table" id="tbl2026">
+          <thead>
+            <tr>
+              <th>Tingkatan</th>
+              <th>Kuota</th>
+              <th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th>
+              <th>Mei</th><th>Jun</th><th>Jul</th><th>Agu</th>
+              <th>Sep</th><th>Okt</th><th>Nov</th><th>Des</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- PKL -->
+            <tr class="row-level">
+              <td rowspan="2" class="col-level">PKL<br><span>SMK/Sederajat</span></td>
+              <td class="col-kuota">Kapasitas</td>
+              <td class="cap">10</td><td class="cap">10</td><td class="cap">10</td><td class="cap">10</td>
+              <td class="cap">10</td><td class="cap">10</td><td class="cap">10</td><td class="cap">10</td>
+              <td class="cap">10</td><td class="cap">10</td><td class="cap">10</td><td class="cap">10</td>
+            </tr>
+            <tr class="row-berjalan">
+              <td class="col-kuota col-berjalan">Berlangsung</td>
+              <td class="val" contenteditable="true">10</td><td class="val" contenteditable="true">10</td>
+              <td class="val" contenteditable="true">10</td><td class="val" contenteditable="true">4</td>
+              <td class="val" contenteditable="true">7</td><td class="val" contenteditable="true">9</td>
+              <td class="val" contenteditable="true">9</td><td class="val" contenteditable="true">9</td>
+              <td class="val" contenteditable="true">9</td><td class="val" contenteditable="true">1</td>
+              <td class="val" contenteditable="true">4</td><td class="val" contenteditable="true">5</td>
+            </tr>
+            <!-- Internship -->
+            <tr class="row-level">
+              <td rowspan="2" class="col-level">Internship<br><span>Perguruan Tinggi</span></td>
+              <td class="col-kuota">Kapasitas</td>
+              <td class="cap">3</td><td class="cap">3</td><td class="cap">3</td><td class="cap">3</td>
+              <td class="cap">3</td><td class="cap">3</td><td class="cap">3</td><td class="cap">3</td>
+              <td class="cap">3</td><td class="cap">3</td><td class="cap">3</td><td class="cap">3</td>
+            </tr>
+            <tr class="row-berjalan">
+              <td class="col-kuota col-berjalan">Berlangsung</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">1</td>
+              <td class="val" contenteditable="true">2</td><td class="val" contenteditable="true">3</td>
+              <td class="val" contenteditable="true">3</td><td class="val" contenteditable="true">3</td>
+              <td class="val" contenteditable="true">3</td><td class="val" contenteditable="true">1</td>
+              <td class="val" contenteditable="true">1</td><td class="val" contenteditable="true">1</td>
+              <td class="val" contenteditable="true">1</td><td class="val" contenteditable="true">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABEL 2027 -->
+    <div class="kap-table-block">
+      <div class="kap-table-title">Periode 2027</div>
+      <div class="kap-scroll">
+        <table class="kap-table" id="tbl2027">
+          <thead>
+            <tr>
+              <th>Tingkatan</th>
+              <th>Kuota</th>
+              <th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th>
+              <th>Mei</th><th>Jun</th><th>Jul</th><th>Agu</th>
+              <th>Sep</th><th>Okt</th><th>Nov</th><th>Des</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- PKL -->
+            <tr class="row-level">
+              <td rowspan="2" class="col-level">PKL<br><span>SMK/Sederajat</span></td>
+              <td class="col-kuota">Kapasitas</td>
+              <td class="cap">10</td><td class="cap">10</td><td class="cap">10</td><td class="cap">10</td>
+              <td class="cap">10</td><td class="cap">10</td><td class="cap">10</td><td class="cap">10</td>
+              <td class="cap">10</td><td class="cap">10</td><td class="cap">10</td><td class="cap">10</td>
+            </tr>
+            <tr class="row-berjalan">
+              <td class="col-kuota col-berjalan">Berlangsung</td>
+              <td class="val" contenteditable="true">5</td><td class="val" contenteditable="true">5</td>
+              <td class="val" contenteditable="true">5</td><td class="val" contenteditable="true">5</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+            </tr>
+            <!-- Internship -->
+            <tr class="row-level">
+              <td rowspan="2" class="col-level">Internship<br><span>Perguruan Tinggi</span></td>
+              <td class="col-kuota">Kapasitas</td>
+              <td class="cap">3</td><td class="cap">3</td><td class="cap">3</td><td class="cap">3</td>
+              <td class="cap">3</td><td class="cap">3</td><td class="cap">3</td><td class="cap">3</td>
+              <td class="cap">3</td><td class="cap">3</td><td class="cap">3</td><td class="cap">3</td>
+            </tr>
+            <tr class="row-berjalan">
+              <td class="col-kuota col-berjalan">Berlangsung</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+              <td class="val" contenteditable="true">0</td><td class="val" contenteditable="true">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LEGENDA -->
+    <div class="kap-legend">
+      <div class="legend-item"><span class="leg-dot" style="background:#e8f5e9;border-color:#81c784;"></span> Tersedia (masih ada slot)</div>
+      <div class="legend-item"><span class="leg-dot" style="background:#fff8e1;border-color:#ffd54f;"></span> Hampir penuh</div>
+      <div class="legend-item"><span class="leg-dot" style="background:#fff3e0;border-color:#ffb74d;"></span> Penuh</div>
+      <div class="legend-item"><span class="leg-dot" style="background:#ffebee;border-color:#e57373;"></span> Melebihi kapasitas</div>
+      <div class="legend-item"><span class="leg-dot" style="background:#f3f4f8;border-color:#c8cfe8;"></span> Kosong / Belum ada</div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .kap-wrapper { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 2rem; }
+
+  .kap-table-block {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(20,94,252,.07);
+  }
+
+  .kap-table-title {
+    background: var(--blue); color: #fff;
+    font-family: 'Sora', sans-serif; font-weight: 700;
+    font-size: .9rem; padding: .75rem 1.25rem;
+    letter-spacing: .03em;
+  }
+
+  .kap-scroll { overflow-x: auto; }
+
+  .kap-table {
+    width: 100%; border-collapse: collapse;
+    font-size: .85rem; min-width: 780px;
+  }
+
+  .kap-table thead tr {
+    background: #f0f5ff;
+  }
+  .kap-table th {
+    padding: .65rem .75rem; text-align: center;
+    font-family: 'Sora', sans-serif; font-weight: 700;
+    color: var(--blue); border-bottom: 2px solid var(--border);
+    white-space: nowrap; font-size: .78rem; letter-spacing: .03em;
+  }
+  .kap-table th:first-child, .kap-table th:nth-child(2) { text-align: left; }
+
+  .kap-table td {
+    padding: .6rem .75rem; border-bottom: 1px solid var(--border);
+    text-align: center; color: var(--text);
+  }
+
+  .col-level {
+    font-family: 'Sora', sans-serif; font-weight: 700;
+    font-size: .82rem; color: var(--text);
+    text-align: left !important; white-space: nowrap;
+    border-right: 1px solid var(--border);
+    background: #f8faff;
+    vertical-align: middle;
+  }
+  .col-level span { display: block; font-weight: 400; color: var(--muted); font-size: .75rem; margin-top: .15rem; }
+
+  .col-kuota {
+    font-size: .8rem; color: var(--muted);
+    text-align: left !important; white-space: nowrap;
+    border-right: 1px solid var(--border);
+    padding-left: 1rem !important;
+  }
+  .col-berjalan { color: var(--text) !important; font-weight: 600; }
+
+  .cap {
+    background: #f8faff; color: var(--muted);
+    font-size: .82rem;
+  }
+
+  /* Editable value cells */
+  .val {
+    font-weight: 700; cursor: text;
+    border-radius: 6px; transition: background .15s;
+    min-width: 38px; outline: none;
+    font-family: 'Sora', sans-serif;
+  }
+  .val:focus {
+    outline: 2px solid var(--blue);
+    background: #fff !important;
+  }
+
+  /* Color states */
+  .val.state-empty  { background: #f3f4f8; color: #aab0cc; }
+  .val.state-low    { background: #e8f5e9; color: #2e7d32; }
+  .val.state-medium { background: #fff8e1; color: #f57f17; }
+  .val.state-full   { background: #fff3e0; color: #e65100; }
+  .val.state-over   { background: #ffebee; color: #c62828; }
+
+  .row-level td { border-top: 2px solid var(--border); }
+
+  /* Legend */
+  .kap-legend {
+    display: flex; flex-wrap: wrap; gap: .75rem 1.5rem;
+    padding: .5rem 0; align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: .45rem; font-size: .8rem; color: var(--muted); }
+  .leg-dot {
+    width: 16px; height: 16px; border-radius: 4px;
+    border: 1.5px solid; display: inline-block; flex-shrink: 0;
+  }
+</style>
+
+<script>
+  function colorVal(cell) {
+    const val = parseInt(cell.textContent.trim()) || 0;
+    const row = cell.closest('tr');
+    const capRow = row.previousElementSibling;
+    if (!capRow) return;
+    const idx = Array.from(row.cells).indexOf(cell);
+    const capCell = capRow.cells[idx];
+    if (!capCell) return;
+    const cap = parseInt(capCell.textContent.trim()) || 0;
+
+    cell.classList.remove('state-empty','state-low','state-medium','state-full','state-over');
+    if (val === 0)          cell.classList.add('state-empty');
+    else if (val < cap * 0.5) cell.classList.add('state-low');
+    else if (val < cap)       cell.classList.add('state-medium');
+    else if (val === cap)     cell.classList.add('state-full');
+    else                      cell.classList.add('state-over');
+  }
+
+  document.querySelectorAll('.val').forEach(cell => {
+    colorVal(cell);
+    cell.addEventListener('input', () => colorVal(cell));
+    cell.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); cell.blur(); }
+    });
+    cell.addEventListener('focus', () => {
+      const range = document.createRange();
+      range.selectNodeContents(cell);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+    });
+  });
+</script>
+
+<!-- CTA -->
+<section class="cta-section" id="daftar">
+  <div class="section-label">Yuk Bergabung</div>
+  <h2 class="section-title">Siap Menjadi Bagian dari ICHIBOT?</h2>
+  <p class="section-sub">Jangan lewatkan kesempatan belajar langsung di lingkungan industri elektronik yang dinamis. Kuota terbatas!</p>
+  <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:1rem;">
+    <a href="https://forms.gle/wzz3Ke4XUaa4FPkZ7" target="_blank" class="btn-primary">Daftar Sekarang!</a>
+    <a href="https://www.ichibot.id/" class="btn-outline">Tentang ICHIBOT</a>
+  </div>
+
+  <div class="cta-contact">
+    <a href="https://wa.me/6288905569645" class="contact-item" target="_blank">
+      <span class="ci">📱</span> WhatsApp
+    </a>
+    <a href="mailto:internship@ichibot.id" class="contact-item">
+      <span class="ci">✉️</span> internship@ichibot.id
+    </a>
+    <a href="https://ichibot.id" class="contact-item" target="_blank">
+      <span class="ci">🌐</span> ichibot.id
+    </a>
+    <span class="contact-item">
+      <span class="ci">📍</span> Yogyakarta, DIY
+    </span>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">ICHI<span>BOT</span></a>
+  <p>© 2025 Ichibot. Toko Elektronik & IoT Terpercaya di Yogyakarta.</p>
+</footer>
+
+</body>
+</html>
